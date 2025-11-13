@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Awareness Times — Breaking the Silence</title>
+  <meta name="description" content="The Awareness Times: a digital newspaper dedicated to breaking the silence around abuse. Resources, survivors' stories, news and help." />
+  <style>
+    :root{
+      --purple:#5B2C6F;
+      --accent:#8E44AD;
+      --muted:#6b6b6b;
+      --bg:#ffffff;
+      --card:#f7f6fb;
+      --gap:18px;
+      --radius:12px;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:#222;line-height:1.45}
+    a{color:inherit;text-decoration:none}
+    header{background:linear-gradient(90deg, rgba(91,44,111,0.95), rgba(142,68,173,0.95));color:#fff;padding:18px 20px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:1200px;margin:0 auto}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:56px;height:56px;border-radius:50%;background:linear-gradient(180deg,#fff7, rgba(255,255,255,0.06));display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,0.12)}
+    .logo svg{width:34px;height:34px}
+    .title{font-weight:700;font-size:18px}
+    .motto{font-size:12px;opacity:0.95}
+
+    nav{margin-top:12px;max-width:1200px;margin-left:auto;margin-right:auto;display:flex;align-items:center;justify-content:space-between;padding:0 20px}
+    .nav-left{display:flex;align-items:center;gap:12px}
+    .nav-links{display:flex;gap:8px}
+    .nav-links > .item{position:relative}
+    .nav-links a{padding:10px 14px;border-radius:10px;color:#fff;font-weight:600}
+    .nav-links a:hover{background:rgba(255,255,255,0.06)}
+    .dropdown{position:absolute;top:44px;left:0;background:#fff;color:#222;padding:10px;border-radius:10px;min-width:200px;box-shadow:0 10px 30px rgba(0,0,0,0.12);display:none}
+    .dropdown a{display:block;padding:8px;border-radius:8px;color:var(--muted)}
+    .nav-links .item:focus-within .dropdown, .nav-links .item:hover .dropdown{display:block}
+
+    .cta{display:flex;gap:8px}
+    .btn{background:#fff;color:var(--purple);padding:8px 12px;border-radius:10px;font-weight:700;border:none;cursor:pointer}
+    .btn.secondary{background:transparent;border:1px solid rgba(255,255,255,0.18);color:#fff}
+
+    /* responsive hamburger */
+    .hamburger{display:none;background:transparent;border:0;color:#fff}
+
+    /* hero */
+    .hero{max-width:1200px;margin:20px auto;padding:30px 20px;border-radius:14px;display:grid;grid-template-columns:1fr;gap:20px}
+    .hero-inner{background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="600"></svg>') center/cover no-repeat, linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.25));border-radius:12px;padding:34px;color:#fff;position:relative;overflow:hidden;background-color:rgba(0,0,0,0.12)}
+    .hero h1{font-size:32px;margin:0 0 12px}
+    .hero p{margin:0 0 18px;opacity:0.95}
+    .hero .actions{display:flex;gap:12px}
+
+    /* cards grid */
+    .grid{max-width:1200px;margin:20px auto;padding:0 20px;display:grid;grid-template-columns:2fr 1fr;gap:18px}
+    .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+    .card{background:var(--card);padding:14px;border-radius:10px}
+    .card h3{margin:0 0 8px;font-size:16px}
+    .card p{margin:0;color:var(--muted);font-size:14px}
+
+    .rightcol{display:flex;flex-direction:column;gap:12px}
+    .resources{background:#fff;padding:14px;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,0.05)}
+    .hotline{display:flex;align-items:center;gap:10px;padding:10px;border-radius:10px;background:linear-gradient(90deg, rgba(142,68,173,0.06), rgba(91,44,111,0.06))}
+    .hotline strong{color:var(--purple)}
+
+    /* adverts */
+    .ad{background:#fff;border-radius:10px;padding:10px;display:flex;align-items:center;justify-content:center;height:120px;color:var(--muted);border:1px dashed #eee}
+
+    footer{max-width:1200px;margin:28px auto;padding:14px 20px;color:var(--muted)}
+    .footer-grid{display:flex;justify-content:space-between;align-items:center;gap:12px}
+
+    /* chatbot */
+    .chatbot{position:fixed;right:18px;bottom:18px;background:var(--accent);color:#fff;padding:12px;border-radius:18px;box-shadow:0 8px 30px rgba(0,0,0,0.2);cursor:pointer}
+    .chat-window{position:fixed;right:18px;bottom:78px;width:320px;background:#fff;border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,0.2);overflow:hidden;display:none}
+    .chat-window header{background:var(--accent);color:#fff;padding:12px;font-weight:700}
+    .chat-window .messages{padding:12px;min-height:140px;max-height:260px;overflow:auto}
+    .chat-window .composer{display:flex;gap:8px;padding:10px;border-top:1px solid #eee}
+    .chat-window .composer input{flex:1;padding:8px;border-radius:8px;border:1px solid #ddd}
+    .chat-window .composer button{padding:8px 10px;border-radius:8px;border:0;background:var(--accent);color:#fff}
+
+    /* modal (report abuse) */
+    .modal{position:fixed;left:0;top:0;width:100%;height:100%;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.45)}
+    .modal .panel{background:#fff;padding:18px;border-radius:12px;max-width:680px;width:100%}
+
+    /* responsive */
+    @media (max-width:900px){
+      .grid{grid-template-columns:1fr}
+      .cards{grid-template-columns:1fr}
+      nav{padding:0 12px}
+      .hamburger{display:block}
+      .nav-links{display:none}
+    }
+
+  </style>
+</head>
+<body>
+  <header>
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">
+          <!-- candle icon -->
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 2C12 2 14 5 12 7C10 5 12 2 12 2Z" fill="#fff" /><rect x="9" y="7" width="6" height="12" rx="2" fill="#fff" /></svg>
+        </div>
+        <div>
+          <div class="title">The Awareness Times</div>
+          <div class="motto">Breaking the Silence</div>
+        </div>
+      </div>
+      <div class="cta">
+        <button class="btn" onclick="openReport()">Report Abuse</button>
+        <button class="btn secondary" onclick="scrollToSection('contact')">Contact</button>
+        <button class="hamburger" aria-label="Open menu" onclick="toggleNav()">☰</button>
+      </div>
+    </div>
+    <nav>
+      <div class="nav-left">
+        <div class="nav-links" role="menubar">
+          <div class="item" tabindex="0"><a href="#">Home</a></div>
+          <div class="item" tabindex="0"><a href="#">News</a>
+            <div class="dropdown" role="menu" aria-label="News submenu">
+              <a href="#">Domestic Violence</a>
+              <a href="#">Child Abuse</a>
+              <a href="#">Workplace Harassment</a>
+              <a href="#">Policy & Law</a>
+            </div>
+          </div>
+          <div class="item" tabindex="0"><a href="#">Survivors' Stories</a></div>
+          <div class="item" tabindex="0"><a href="#">Resources</a>
+            <div class="dropdown" role="menu" aria-label="Resources submenu">
+              <a href="#">Helplines</a>
+              <a href="#">Counselling</a>
+              <a href="#">Legal Aid</a>
+              <a href="#">Shelters & NGOs</a>
+            </div>
+          </div>
+          <div class="item" tabindex="0"><a href="#contact">Contact</a></div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-inner" style="background-image:linear-gradient(180deg, rgba(91,44,111,0.9), rgba(142,68,173,0.9)), url('https://images.unsplash.com/photo-1501594907352-04cda38ebc29?q=80&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder');background-size:cover;background-position:center;">
+        <h1>Breaking the Silence Against Abuse</h1>
+        <p>We amplify survivors' voices, provide trusted resources and advocate for justice. If you or someone you know needs help — you are not alone.</p>
+        <div class="actions">
+          <button class="btn" onclick="scrollToSection('resources')">Find Help Now</button>
+          <button class="btn secondary" onclick="scrollToSection('stories')">Read Survivors' Stories</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <h2 style="margin:0">Latest News</h2>
+          <small style="color:var(--muted)">Published weekly • Tuesdays</small>
+        </div>
+
+        <div class="cards" aria-live="polite">
+          <article class="card">
+            <h3>Community Rises to Support Survivors</h3>
+            <p>Local NGOs collaborate to provide safe housing and counselling services for survivors...</p>
+            <a href="#">Read more →</a>
+          </article>
+
+          <article class="card">
+            <h3>New Policy Debated in Parliament</h3>
+            <p>Advocates call for stronger protections and faster legal recourse for victims of abuse...</p>
+            <a href="#">Read more →</a>
+          </article>
+
+          <article class="card">
+            <h3>School Workshop Empowers Students</h3>
+            <p>Youth-led initiatives teach students how to recognise and report abuse safely...</p>
+            <a href="#">Read more →</a>
+          </article>
+
+          <article class="card">
+            <h3>Mental Health Support Expands</h3>
+            <p>Counselling access grows through partnerships with local clinics and volunteers...</p>
+            <a href="#">Read more →</a>
+          </article>
+        </div>
+
+      </div>
+
+      <aside class="rightcol">
+        <div class="resources" id="resources">
+          <h3 style="margin-top:0">Resources & Helplines</h3>
+          <div class="hotline">
+            <div style="font-size:22px">☎️</div>
+            <div>
+              <div style="font-size:14px">National Helpline (24/7)</div>
+              <div><strong>0800-123-4567</strong></div>
+            </div>
+          </div>
+
+          <ul style="margin:12px 0 0;padding-left:18px;color:var(--muted)">
+            <li>Childline SA — 08000-55555</li>
+            <li>Lifeline — 0861-322-322</li>
+            <li>Legal Aid — contact local offices</li>
+          </ul>
+          <p style="margin-top:12px;color:var(--muted)">If you are in immediate danger, call your local emergency services now.</p>
+        </div>
+
+        <div class="ad" aria-hidden="true">Partner with us • NGO Banner</div>
+
+        <div class="resources" id="stories">
+          <h3 style="margin-top:0">Survivors' Stories</h3>
+          <blockquote style="margin:8px 0;padding-left:12px;border-left:4px solid var(--accent);color:var(--muted)">"Sharing my story helped me heal and find community support."</blockquote>
+          <a href="#">Read more stories →</a>
+        </div>
+
+      </aside>
+    </section>
+
+    <section style="max-width:1200px;margin:12px auto;padding:0 20px">
+      <div class="ad" style="height:80px;margin-bottom:12px">Advertising / Sponsorship space</div>
+
+      <div style="background:#fff;padding:14px;border-radius:12px;display:flex;gap:14px;align-items:center">
+        <div style="flex:1">
+          <h3 style="margin:0">Our Mission</h3>
+          <p style="margin:6px 0;color:var(--muted)">The Awareness Times educates, informs and empowers by shining a light on abuse, supporting survivors and advocating for justice and healing in our communities.</p>
+        </div>
+        <div style="text-align:right">
+          <small style="display:block;color:var(--muted)">Target audience:</small>
+          <strong>Youth (13–30), Parents, Educators, Social Workers</strong>
+        </div>
+      </div>
+
+    </section>
+
+    <section id="contact" style="max-width:1200px;margin:18px auto;padding:0 20px 40px">
+      <div style="display:grid;grid-template-columns:1fr 360px;gap:18px">
+        <div style="background:#fff;padding:16px;border-radius:12px">
+          <h3>Contact & Partnerships</h3>
+          <p style="color:var(--muted)">For story submissions, partnerships or support, reach out to us.</p>
+          <form onsubmit="sendContact(event)">
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <input name="name" placeholder="Your name" required style="padding:10px;border-radius:8px;border:1px solid #ddd" />
+              <input name="email" type="email" placeholder="you@example.com" required style="padding:10px;border-radius:8px;border:1px solid #ddd" />
+              <textarea name="message" placeholder="Tell us how we can help" required style="padding:10px;border-radius:8px;border:1px solid #ddd;min-height:110px"></textarea>
+              <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end">
+                <button type="submit" class="btn">Send Message</button>
+                <button type="button" class="btn secondary" onclick="openReport()">Report Abuse</button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div>
+          <div class="ad" style="margin-bottom:12px">Newsletter Signup</div>
+          <div class="resources">
+            <h4 style="margin-top:0">Subscribe</h4>
+            <p style="color:var(--muted)">Get weekly updates every Tuesday — resources, stories and news.</p>
+            <form onsubmit="subscribe(event)">
+              <input name="email" type="email" placeholder="Your email" required style="padding:8px;border-radius:8px;border:1px solid #ddd;width:100%" />
+              <div style="margin-top:8px;display:flex;justify-content:flex-end"><button class="btn" type="submit">Subscribe</button></div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="footer-grid">
+      <div>© <strong>The Awareness Times</strong> • Breaking the Silence</div>
+      <div style="text-align:right;color:var(--muted)">Email: info@awarenesstimes.org • Hotline: 0800-123-4567</div>
+    </div>
+  </footer>
+
+  <!-- Chatbot -->
+  <div class="chatbot" id="chatbotBtn" onclick="toggleChat()">Need Help?</div>
+  <div class="chat-window" id="chatWindow" role="dialog" aria-label="Help chatbot">
+    <header>Support Assistant</header>
+    <div class="messages" id="messages">
+      <div style="margin-bottom:8px;color:var(--muted)"><strong>Auto:</strong> Hello — I can share resources or connect you to hotlines. Type 'help' or 'resource'.</div>
+    </div>
+    <div class="composer">
+      <input id="chatInput" placeholder="Type a message..." />
+      <button onclick="sendChat()">Send</button>
+    </div>
+  </div>
+
+  <!-- Report modal -->
+  <div class="modal" id="reportModal" aria-hidden="true">
+    <div class="panel">
+      <h3>Report Abuse (confidential)</h3>
+      <p style="color:var(--muted)">Use this form to privately tell us about an incident. If this is an emergency, call your local emergency number immediately.</p>
+      <form onsubmit="submitReport(event)">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
+          <input name="rname" placeholder="Your name (optional)" style="padding:8px;border-radius:8px;border:1px solid #ddd" />
+          <input name="rphone" placeholder="Phone (optional)" style="padding:8px;border-radius:8px;border:1px solid #ddd" />
+        </div>
+        <textarea name="rdesc" placeholder="Describe the incident (use factual details)" required style="width:100%;margin-top:8px;padding:10px;border-radius:8px;border:1px solid #ddd;min-height:120px"></textarea>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
+          <button type="button" class="btn secondary" onclick="closeReport()">Cancel</button>
+          <button class="btn" type="submit">Submit Report</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // small interactive behaviours
+    function toggleNav(){
+      const nav = document.querySelector('.nav-links');
+      nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
+    }
+    function scrollToSection(id){
+      const el = document.getElementById(id);
+      if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+    }
+
+    // Chatbot (very simple rule-based placeholder)
+    function toggleChat(){
+      const win = document.getElementById('chatWindow');
+      win.style.display = win.style.display === 'block' ? 'none' : 'block';
+    }
+    function sendChat(){
+      const input = document.getElementById('chatInput');
+      const messages = document.getElementById('messages');
+      const text = input.value.trim();
+      if(!text) return;
+      const user = document.createElement('div'); user.style.margin='8px 0'; user.innerHTML = '<strong>You:</strong> '+text; messages.appendChild(user);
+      input.value=''; messages.scrollTop = messages.scrollHeight;
+      setTimeout(()=>{
+        const bot = document.createElement('div'); bot.style.margin='8px 0'; bot.style.color='var(--muted)';
+        if(/help|resource|hotline|support/i.test(text)){
+          bot.innerHTML = '<strong>Auto:</strong> You can call the national helpline 0800-123-4567 or visit the Resources panel for counselling and legal aid.';
+        } else if(/report|abuse|danger/i.test(text)){
+          bot.innerHTML = '<strong>Auto:</strong> If you are in immediate danger, call emergency services. Would you like to open the confidential report form? <button onclick="openReport()" style="margin-left:6px;padding:6px;border-radius:6px;background:var(--accent);color:#fff;border:0">Open Form</button>';
+        } else {
+          bot.innerHTML = '<strong>Auto:</strong> I am here to help — type "help" to see options or "resource" to get hotline info.';
+        }
+        messages.appendChild(bot); messages.scrollTop = messages.scrollHeight;
+      },700);
+    }
+
+    // contact form handlers (mock)
+    function sendContact(e){
+      e.preventDefault();
+      alert('Thank you — your message has been received. (Mock submission for assignment demo)');
+      e.target.reset();
+    }
+    function subscribe(e){
+      e.preventDefault();
+      alert('Subscribed — you will get weekly updates. (Mock)');
+      e.target.reset();
+    }
+
+    // report modal
+    function openReport(){
+      document.getElementById('reportModal').style.display='flex';
+      document.getElementById('reportModal').setAttribute('aria-hidden','false');
+    }
+    function closeReport(){
+      document.getElementById('reportModal').style.display='none';
+      document.getElementById('reportModal').setAttribute('aria-hidden','true');
+    }
+    function submitReport(e){
+      e.preventDefault();
+      // In a real site you'd send this to a secure backend. For assignment/demo we show a confirmation.
+      alert('Report submitted confidentially. We will review and respond. (Mock submission)');
+      closeReport();
+      e.target.reset();
+    }
+
+    // accessible keyboard: close chat on escape
+    document.addEventListener('keydown', (ev)=>{
+      if(ev.key === 'Escape'){
+        document.getElementById('chatWindow').style.display='none';
+        closeReport();
+      }
+    });
+  </script>
+</body>
+</html>
